@@ -1,5 +1,5 @@
 // Select elements for file upload zone and thumbnail display
-const dropZone = document.querySelector("#files");
+const dropZone = document.querySelector("body");
 const fileZone = document.querySelector("#upload-files");
 const thumbnailDiv = document.querySelector("#thumbnails");
 let fileList = []; // Array to keep track of validated files
