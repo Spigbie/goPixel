@@ -323,6 +323,35 @@ function displayOriginalImage(file) {
     reader.readAsDataURL(file);
 }
 
+document.querySelector("#delete-all-btn").addEventListener("click", (e) => {    
+    if (fileList.length > 0) {
+        if (confirm("Are you sure you want to remove all files?")) {
+            fileList.forEach(file => {
+                const fileName = file.name;
+                escapedFileName = CSS.escape(fileName);
+
+                //console.log("Attempting to locate thumbnail with ID:", `#thumb-${fileName}`, document.querySelector(`#thumb-${escapedFileName}`));
+                canvasThumbnail = document.querySelector(`#thumb-${escapedFileName}`);
+                thumbnailParent = canvasThumbnail.closest(".file");
+                thumbnailParent.remove();
+
+                //console.log("Attempting to locate items with ID:", `#large-${fileName}`, document.querySelector(`#large-${escapedFileName}`));
+                const largeCanvas = Array.from(document.querySelectorAll("#large-display canvas")).find((canvas) => canvas.dataset.fileName === fileName)
+                largeParent = largeCanvas.closest(".large-file");
+                largeParent.remove();
+
+                // Update the fileList
+                fileList = fileList.filter((file) => file.name !== fileName);
+
+            });
+            saveFileListToLocalStorage();
+        }; 
+    } else {
+        alert("Files are already empty");
+        return;
+    }  
+});
+
 function trashFiles() {
     const selectedThumbnails = document.querySelectorAll(".file.selected");
 
