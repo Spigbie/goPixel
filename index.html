@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>goPixelart</title>
+
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<script src="script.js" defer></script>
+</head>
+<body>
+	<header>
+		<h1>goPixelart</h1>
+		<p>Welcome to goPixelart! The perfect helper for you to thrive as a goSupermodel Cummunity designer.</p>
+	</header>
+
+	<main>
+		<div id="files">
+
+			<div class="file">
+				<input type="file" id="upload-files" accept=".png" multiple>
+				<div><img width="30" height="30" src="Images/plus-icon.svg"></div>
+			</div>
+
+			<div id="thumbnails">
+			</div>
+
+			<div class="file">
+				<div id="trash-btn"><img width="30" height="30" src="Images/delete-icon.svg"></div>
+			</div>
+		</div>
+
+		<div id="toggle-menue">
+
+			<div>
+				
+				<label>Background Colour:</label>
+				<input type="color" id="bg-color-picker" name="" value="#aaaaaa">
+				<input type="checkbox" id="toggle-bg-color" name="">
+			</div>
+
+			<div>
+
+				<label>Model Template:</label>
+				<select name="template" id="select-template" >
+					<option value="mannequin" selected="selected">mannequin</option>
+					<option value="skin-1">skin-1</option>
+					<option value="skin-2">skin-2</option>
+					<option value="skin-3">skin-3</option>
+					<option value="skin-4">skin-4</option>
+					<option value="skin-5">skin-5</option>
+					<option value="skin-6">skin-6</option>
+					<option value="skin-7">skin-7</option>
+					<option value="skin-8">skin-8</option>
+					<option value="skin-9">skin-9</option>
+					<option value="skin-10">skin-10</option>
+					<option value="skin-11">skin-11</option>
+					<option value="skin-12">skin-12</option>
+					<option value="skin-13">skin-13</option>
+					<option value="skin-14">skin-14</option>
+					<option value="skin-15">skin-15</option>
+				</select>
+				<input type="checkbox" name="template" id="toggle-template-chbx" checked>
+			</div>
+
+			<div>
+				<label>display cover area:</label>
+				<input type="checkbox" id="toggle-cover-chbx">
+			</div>
+
+			<div>
+				<label>Make opaque:</label>
+				<input type="checkbox" id="toggle-opaque-chbx">
+			</div>
+			<div>
+				<label>display bounding box:</label>
+				<input type="checkbox" id="toggle-boundingbx-chbx">
+			</div>
+
+		</div>
+		<div id="large-display"></div>
+	</main>
+	
+</body>
+</html>
