@@ -453,7 +453,7 @@ document.querySelector("#toggle-bg-color").addEventListener("change", function (
 
 
 function isImageCoveringMask(alphaMask, image) {
-    threshold = 230;
+    threshold = 229;
 
     // Create canvases to load the images
     const maskCanvas = document.createElement("canvas");
