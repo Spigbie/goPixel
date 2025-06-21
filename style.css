@@ -57,6 +57,7 @@ header{
 	padding: 14px 28px;
 }
 #files{
+	height: 77px;
 }
 
 #files, #thumbnails{
@@ -162,6 +163,7 @@ header{
 	display: flex;
 	font-size: 11px;
 	gap: 14px;
+	align-items: baseline;
 }
 
 footer{
