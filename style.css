@@ -193,3 +193,8 @@ footer{
 	top: -1px;
 	left: -1px;
 }
+
+td, th{
+	border: 1px solid black;
+	padding: 3px;
+}
