@@ -41,7 +41,6 @@ main{
 
 #files input::-webkit-file-upload-button{
 	visibility: hidden;
-	display: none;
 	height: 60px;
 	width: 60px;
 }
@@ -199,4 +198,5 @@ td, th{
 	border: 1px solid black;
 	padding: 3px;
 }
+
 
