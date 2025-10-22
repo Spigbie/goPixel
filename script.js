@@ -4,7 +4,8 @@ const fileZone = document.querySelector("#upload-files");
 const thumbnailDiv = document.querySelector("#thumbnails");
 let fileList = []; // Array to keep track of validated files
 let browserZoomLevel = getBrowserZoomLevel();
-const menuButton = document.querySelector("#toggle-menu-button");
+const menuButtonDiv = document.querySelector("#toggle-menu-button");
+const menuButton = document.querySelector("#toggle-menu-button img");
 
 
 
@@ -41,12 +42,12 @@ menuButton.addEventListener("click", (e) => {
     const menuDiv = document.querySelector("#toggle-menu");
     if (menuDiv.className == "hidden"){
         menuDiv.classList.remove("hidden");
-        menuButton.querySelector("img").src="Images/arrow-left.svg";
+        menuButton.src="Images/arrow-left.svg";
 
     }
     else{
         menuDiv.className = "hidden";
-        menuButton.querySelector("img").src="Images/arrow-right.svg";
+        menuButton.src="Images/arrow-right.svg";
     }
 });
 
@@ -451,6 +452,7 @@ function changeTemplate(){
     let template;
     switch (document.querySelector("#select-template").value){
         case "mannequin": template = "Images/mannequin.png"; break;
+        case "mannequin-gSt": template = "https://gosuper.tools/static/images/gstmannequin.png"; break;
         case "skin-1": template = "https://gosupermodel.com/dollsnapshot.png?k=AAAAANZa9n8ABQAAACsFAAQAACcTAQACAAAB1MAAAg4AAAAnEQEAAAAAACcRAgAAAAAAAAABA.Ye&l=t"; break;
         case "skin-2": template = "https://gosupermodel.com/dollsnapshot.png?k=AAAAAIL_Of8ABQAAACsFAAQAACcTAQECAAAB1MAAAg4AAAAnEQEAAAAAACcRAgAAAAAAAABvj_1f&l=t"; break;
         case "skin-3": template = "https://gosupermodel.com/dollsnapshot.png?k=AAAAAN62P1sABQAAACsFAAQAACcTAQICAAAB1MAAAg4AAAAnEQEAAAAAACcRAgAAAAAAAADcG9Cc&l=t"; break;

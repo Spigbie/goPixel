@@ -3,7 +3,9 @@
     src: url('https://use.typekit.net/af/32b70b/0000000000000000775a3832/31/l?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=n4&v=3'); /*URL to font*/
 }
 
-
+.template-display, .cover-display, .item-display canvas{
+	image-rendering: pixelated;
+}
 
 
 :root{
@@ -11,6 +13,17 @@
 	--bg-cover-toggle:none;
 	--bg-template-toggle:url("Images/mannequin.png");
 	--bg-color-toggle:url("Images/Transparent.png");
+
+
+	--color-0: #ffffff;
+	--color-1: #aaaaaa;
+	--color-2: #666666;
+	--color-3: #3d3d3d;
+
+	--color-4: #32bb67;
+	--color-5: #2e9957;
+
+	--color-6: #cf8383;
 }
 
 * {
@@ -22,14 +35,64 @@
 body{
 	display: grid;
 	width: 100%;
+	background-color: var(--color-0);
 }
 .hidden{
 	display: none !important;
 	visibility: hidden important;
 }
+header{
+	display: flex;
+	align-items: center;
+	gap: 28px;
+	height: 95px;
+	background: linear-gradient(30deg, var(--color-2), var(--color-0));
+	padding: 14px 28px;
+}
 
 header h1{
 	font-family: 'Cooper';
+	color: var(--color-0);
+	user-select: none;
+}
+
+nav{
+	display: flex;
+	gap: 14px;
+
+}
+
+header h1, #toggle-menu-button img, .checkbox label, nav * {
+	user-drag: none;
+    -webkit-user-drag: none;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+}
+
+.nav-btn{
+	padding: 14px 28px;
+	background-color: var(--color-0);
+	border-radius: 50px;
+	font-weight: bold;
+	font-size: 20px;
+	color: var(--color-2);
+
+}
+.nav-btn:hover{
+	background-color: var(--color-4);
+	color: var(--color-0);
+
+}
+
+.active{
+	background-color: var(--color-3);
+	color: var(--color-0);
+}
+
+nav a{
+	text-decoration: none;
 }
 
 main{
@@ -42,28 +105,24 @@ main{
 }
 
 .item-overview{
-	overflow: hidden;
 	flex: 1 1 auto;
 	display: flex;
 	flex-direction: column;
 	min-width: 0;
 	overflow: hidden;
 	gap: 14px;
-
 }
 
-.menu-outer{
+.menu{
 	align-self: flex-start;
 	flex: 0 0 auto;
-}
-
-.menu-inner{
 	position: sticky;
 	top: 0;	
 	display: flex;
 	gap: 7px;
 	padding-top: 14px;
 }
+
 #toggle-menu{
 	font-size: 14px;
 	gap: 14px;
@@ -71,15 +130,22 @@ main{
 	flex-direction: column;
 }
 
-#toggle-menu-button{
+#toggle-menu-button img{
 	cursor: pointer;
+}
+
+.checkboxes{
+	color: var(--color-3);
 }
 .checkbox {
 	min-height: 27px;
 	display: flex;
 	align-items: center;
 	gap: 7px;
+}
 
+.checkbox > *{
+	cursor: pointer;
 }
 
 #files{
@@ -91,7 +157,7 @@ main{
   overflow-x: auto;
   overflow-y: hidden;
   white-space: nowrap;
-  padding-bottom: 14px;
+  padding: 5px;
 }
 
 
@@ -100,7 +166,7 @@ main{
 	padding: 7px;
 	box-sizing: border-box;
 	font-size: 16px;
-	color: white;
+	color: var(--color-0);
 	cursor: pointer;
 	display: flex;
 	justify-content: center;
@@ -109,19 +175,19 @@ main{
 }
 
 #upload-files-btn{
-	background-color: #32bb67;
+	background-color: var(--color-4);
 }
 
 #upload-files-btn:hover{
-	background-color: #2e9957;
+	background-color: var(--color-5);
 }
 
 #trash-btn, #delete-all-btn{
-	background-color: #aaa;
+	background-color: var(--color-1);
 }
 
 #trash-btn:hover, #delete-all-btn:hover{
-	background-color: #cf8383;
+	background-color: var(--color-6);
 }
 
 
@@ -153,21 +219,6 @@ input {
     background: none;
 }
 
-
-#image-error-log{
-	font-size: 11px;
-	color: red;
-	display: flex;
-	column-gap: 14px;
-}
-
-header{
-	background: #ddd;
-	padding: 14px 28px;
-}
-
-
-
 #files img{
 	opacity: 0.1;
 }
@@ -183,7 +234,7 @@ header{
 	height: 50px;
 	padding: 5px;
 	border-radius: 10px;
-	background-color: #eaefd9;
+	background-color: var(--color-1);
 	box-shadow: 2px 5px 5px rgba(0, 0, 0, 0.3);
 	display: flex;
 	align-items: center;
@@ -192,7 +243,7 @@ header{
 
 .file div:hover{
 	cursor: pointer;
-	background-color: #e1d3ec;
+	background-color: var(--color-2);
 }
 
 .file p, .large-file p{
@@ -201,7 +252,7 @@ header{
 	overflow: hidden;
 	text-overflow: ellipsis;
 	box-sizing: border-box;
-	color: #555;
+	color: var(--color-2);
 }
 
 .file p{
@@ -212,23 +263,24 @@ header{
 }
 
 .selected > div{
-    	background-color: #ffd6da;
+    	background-color: var(--color-6);
 }
 .file canvas{
 	max-width: 50px;
 	max-height: 50px;
-	image-rendering: pixelated;
 }
 
 #large-display{
 	display: flex;
 	gap: 14px;
-	flex-wrap: wrap
+	flex-wrap: wrap;
+	padding: 5px;
 }
+
 .large-file{
 	width: 140px;
 	font-size: 9px;
-	color: #555;
+	color: var(--color-4);
 	display: flex;
 	flex-direction: column;
 	gap: 7px;
@@ -263,7 +315,7 @@ header{
 footer{
 	padding: 14px;
 	box-sizing: border-box;
-	background-color: lightgrey;
+	background-color: var(--color-2);
 	position: fixed;
 	bottom: 0;
 	width: 100%;
@@ -294,7 +346,7 @@ td, th{
 	font-size: 20px;
 	text-align: center;
 	padding: 40px;
-	color: #888;
+	color: var(--color-2);
 }
 
 
