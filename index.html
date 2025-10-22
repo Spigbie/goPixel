@@ -5,6 +5,10 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>goPixelart</title>
 
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+
 	<link rel="stylesheet" type="text/css" href="style.css">
 	<script src="script.js" defer></script>
 </head>
@@ -14,75 +18,83 @@
 		<p style="float:left;">Click the + or drag and drop your designer files to get started</p><a href="updates.html" style="float: right;"><p>Recent updates</p></a>
 	</header>
 
-	<main>
-		<div id="files">
+	<main>	
+		<div class="menu-outer">
+			<div class="menu-inner">
+				<div id="toggle-menu-button"><img src="Images/arrow-left.svg"></div>
 
-			<div class="file">
-				<input type="file" id="upload-files" accept=".png" multiple>
-				<div><img width="30" height="30" src="Images/plus-icon.svg"></div>
-			</div>			
-			<div class="file">
-				<div id="trash-btn"><img width="30" height="30" src="Images/delete-icon.svg"></div>
+				<div id="toggle-menu">
+					<div>
+						<input type="file" id="upload-files" accept=".png" multiple hidden>
+						<label id="upload-files-btn" class="button" for="upload-files">
+							<img src="Images/add.svg" height="20px">
+							<span>Add items</span>
+						</label>
+					</div>	
+
+					<div class="button" id="trash-btn">
+						<img src="Images/delete.svg" height="20px" height="20px">
+						<span>Remove items</span>
+					</div>
+
+					<div class="button" id="delete-all-btn">
+						<img src="Images/restart.svg" height="20px">
+						<span>Start over</span>
+					</div>
+					<div class="checkboxes">
+						<div class="checkbox">
+							<input type="checkbox" id="toggle-cover-chbx">
+							<label>Display cover area</label>
+						</div>
+
+						<div class="checkbox">
+							<input type="checkbox" id="toggle-opaque-chbx">
+							<label>Make opaque</label>
+						</div>
+
+						<div class="checkbox">
+							<input type="checkbox" id="toggle-boundingbx-chbx">
+							<label>Display bounding box</label>
+						</div>
+
+						<div class="checkbox">
+							<input type="checkbox" id="toggle-bg-color" name="">
+							<label>Background Colour</label>
+							<input type="color" id="bg-color-picker" name="" value="#aaaaaa">
+						</div>
+
+						<div class="checkbox">
+							<input type="checkbox" name="template" id="toggle-template-chbx" checked>
+							<label>Model Template:</label>
+							<select name="template" id="select-template" >
+								<option value="mannequin" selected="selected">mannequin</option>
+								<option value="skin-1">skin-1</option>
+								<option value="skin-2">skin-2</option>
+								<option value="skin-3">skin-3</option>
+								<option value="skin-4">skin-4</option>
+								<option value="skin-5">skin-5</option>
+								<option value="skin-6">skin-6</option>
+								<option value="skin-7">skin-7</option>
+								<option value="skin-8">skin-8</option>
+								<option value="skin-9">skin-9</option>
+								<option value="skin-10">skin-10</option>
+								<option value="skin-11">skin-11</option>
+								<option value="skin-12">skin-12</option>
+								<option value="skin-13">skin-13</option>
+								<option value="skin-14">skin-14</option>
+								<option value="skin-15">skin-15</option>
+							</select>
+						</div>
+					</div>
+				</div>
 			</div>
-			<div class="file">
-				<div id="delete-all-btn"><img width="40" height="40" src="Images/remove-all-icon.svg"></div>
-			</div>
-
-			<div id="thumbnails">
-			</div>
-
-
 		</div>
-
-		<div id="toggle-menue">
-
-			<div>
-				
-				<label>Background Colour:</label>
-				<input type="color" id="bg-color-picker" name="" value="#aaaaaa">
-				<input type="checkbox" id="toggle-bg-color" name="">
-			</div>
-
-			<div>
-
-				<label>Model Template:</label>
-				<select name="template" id="select-template" >
-					<option value="mannequin" selected="selected">mannequin</option>
-					<option value="skin-1">skin-1</option>
-					<option value="skin-2">skin-2</option>
-					<option value="skin-3">skin-3</option>
-					<option value="skin-4">skin-4</option>
-					<option value="skin-5">skin-5</option>
-					<option value="skin-6">skin-6</option>
-					<option value="skin-7">skin-7</option>
-					<option value="skin-8">skin-8</option>
-					<option value="skin-9">skin-9</option>
-					<option value="skin-10">skin-10</option>
-					<option value="skin-11">skin-11</option>
-					<option value="skin-12">skin-12</option>
-					<option value="skin-13">skin-13</option>
-					<option value="skin-14">skin-14</option>
-					<option value="skin-15">skin-15</option>
-				</select>
-				<input type="checkbox" name="template" id="toggle-template-chbx" checked>
-			</div>
-
-			<div>
-				<label>display cover area:</label>
-				<input type="checkbox" id="toggle-cover-chbx">
-			</div>
-
-			<div>
-				<label>Make opaque:</label>
-				<input type="checkbox" id="toggle-opaque-chbx">
-			</div>
-			<div>
-				<label>display bounding box:</label>
-				<input type="checkbox" id="toggle-boundingbx-chbx">
-			</div>
-
+		
+		<div class="item-overview">
+			<div class="get-started hidden"><span>Get started by dragging and dropping your item files anywhere on the website or clicking "Add items".</span></div>
+			<div id="thumbnails"></div>
+			<div id="large-display"></div>
 		</div>
-		<div id="large-display"></div>
 	</main>
 	
 </body>

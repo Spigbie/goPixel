@@ -4,6 +4,9 @@ const fileZone = document.querySelector("#upload-files");
 const thumbnailDiv = document.querySelector("#thumbnails");
 let fileList = []; // Array to keep track of validated files
 let browserZoomLevel = getBrowserZoomLevel();
+const menuButton = document.querySelector("#toggle-menu-button");
+
+
 
 // Load the fileList from localStorage when the page loads
 fileList = loadFileListFromLocalStorage();
@@ -12,6 +15,9 @@ fileList = loadFileListFromLocalStorage();
 fileList.forEach(file => generateThumbnail(file));
 
 console.log("Initial fileList:", fileList);
+if (fileList.length == 0) {
+    displayStartMessage();
+}
 
 // Event listener for drag-and-drop functionality
 dropZone.addEventListener("dragover", (e) => {
@@ -31,8 +37,25 @@ fileZone.addEventListener("change", (e) => {
     addFiles(fileZone.files); // Add files to the file list
 });
 
+menuButton.addEventListener("click", (e) => {
+    const menuDiv = document.querySelector("#toggle-menu");
+    if (menuDiv.className == "hidden"){
+        menuDiv.classList.remove("hidden");
+        menuButton.querySelector("img").src="Images/arrow-left.svg";
+
+    }
+    else{
+        menuDiv.className = "hidden";
+        menuButton.querySelector("img").src="Images/arrow-right.svg";
+    }
+});
+
 document.querySelector("#trash-btn").addEventListener("click", trashFiles);
 
+
+function displayStartMessage() {
+    
+}
 
 // Load file list from localStorage and convert objects back to File instances
 function loadFileListFromLocalStorage() {
