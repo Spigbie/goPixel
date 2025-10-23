@@ -6,117 +6,53 @@ const fileZone = document.querySelector("#upload-files");
 const thumbnailDiv = document.querySelector("#thumbnails");
 let fileList = []; // Array to keep track of validated files
 let browserZoomLevel = getBrowserZoomLevel();
-const menuButtonDiv = document.querySelector("#toggle-menu-button");
-const menuButton = document.querySelector("#toggle-menu-button img");
+
+const menuBtnDiv = document.querySelector("#toggle-menu-button");
+const menuBtn = document.querySelector("#toggle-menu-button img");
+const trashBtn = document.querySelector("#trash-btn");
+const restartBtn = document.querySelector("#delete-all-btn");
+const coverCb = document.querySelector("#toggle-cover-chbx");
+const templateCb = document.querySelector("#toggle-template-chbx");
+const boundingboxCb = document.querySelector("#toggle-boundingbx-chbx");
+const bgColorCb = document.querySelector("#toggle-bg-color");
+const bgColorPicker = document.querySelector("#bg-color-picker");
+const templateSelector = document.querySelector("#select-template");
+const opaqueCb = document.querySelector("#toggle-opaque-chbx");
+const scaleControls = document.querySelector("#scale-controls");
+
 
 
 //EVENT LISTENERS------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-// Event listener for drag-and-drop functionality
-dropZone.addEventListener("dragover", (e) => {
-    e.preventDefault(); // Prevent default behavior to allow drop
-});
+//listens for zooming
+window.addEventListener("resize", adjustChequeredSize);
 
-dropZone.addEventListener("drop", (e) => {
-    e.preventDefault(); // Prevent default behavior for drop event
-    console.log("Files dropped");
-    const files = e.dataTransfer.files; // Retrieve files from the event
-    addFiles(files); // Add files to the file list
-});
+// Event listener for drag-and-drop functionality
+dropZone.addEventListener("dragover", (e) => {e.preventDefault();}); // Prevent default behavior to allow drop
+
+dropZone.addEventListener("drop", dropHandler);
 
 // Event listener for file selection via input field
-fileZone.addEventListener("change", (e) => {
-    console.log("Files uploaded through input");
-    addFiles(fileZone.files); // Add files to the file list
-});
+fileZone.addEventListener("change", (e) => {addFiles(fileZone.files);});
 
-menuButton.addEventListener("click", (e) => {
-    const menuDiv = document.querySelector("#toggle-menu");
-    if (menuDiv.className == "hidden"){
-        menuDiv.classList.remove("hidden");
-        menuButton.src="Images/arrow-left.svg";
+// Event listener for extending the side menu
+menuBtn.addEventListener("click", toggleMenu);
 
-    }
-    else{
-        menuDiv.className = "hidden";
-        menuButton.src="Images/arrow-right.svg";
-    }
-});
+// Event listener for The trash button
+trashBtn.addEventListener("click", trashFiles);
 
-document.querySelector("#trash-btn").addEventListener("click", trashFiles);
+// Event listener for the start over button
+restartBtn.addEventListener("click", startOver);
 
-document.querySelector("#delete-all-btn").addEventListener("click", (e) => {    
-    if (fileList.length > 0) {
-        if (confirm("Are you sure you want to remove all files?")) {
-            fileList.forEach(file => {
-                const fileName = file.name;
-                escapedFileName = CSS.escape(fileName);
+coverCb.addEventListener("change", toggleCover);
 
-                //console.log("Attempting to locate thumbnail with ID:", `#thumb-${fileName}`, document.querySelector(`#thumb-${escapedFileName}`));
-                canvasThumbnail = document.querySelector(`#thumb-${escapedFileName}`);
-                thumbnailParent = canvasThumbnail.closest(".file");
-                thumbnailParent.remove();
+templateCb.addEventListener("change", toggleTemplate);
 
-                //console.log("Attempting to locate items with ID:", `#large-${fileName}`, document.querySelector(`#large-${escapedFileName}`));
-                const largeCanvas = Array.from(document.querySelectorAll("#large-display canvas")).find((canvas) => canvas.dataset.fileName === fileName)
-                largeParent = largeCanvas.closest(".large-file");
-                largeParent.remove();
+bgColorPicker.addEventListener("input", changeBgColor);
 
-                // Update the fileList
-                fileList = fileList.filter((file) => file.name !== fileName);
+bgColorCb.addEventListener("change", applyBackground);
 
-            });
-            saveFileListToLocalStorage();
-        }; 
-    } else {
-        alert("Files are already empty");
-        return;
-    }  
-});
-
-//listens for zooming
-window.addEventListener("resize", (e) => {
-    getBrowserZoomLevel();
-    
-    document.documentElement.style.setProperty('--bg-size', 28 * 100/getBrowserZoomLevel()+1+("px"));
-});
-
-document.querySelector("#toggle-cover-chbx").addEventListener("change", function (e){
-    if (this.checked) {
-        document.documentElement.style.setProperty('--bg-cover-toggle', `url("Images/Cover_Area.png")`);
-        console.log("Checkbox is checked..");
-    } else {
-        document.documentElement.style.setProperty('--bg-cover-toggle', "none");
-        console.log("Checkbox is not checked..");
-    } 
-});
-
-document.querySelector("#toggle-template-chbx").addEventListener("change", function (e){
-    if (this.checked) {
-        changeTemplate();
-    } else {
-        document.documentElement.style.setProperty('--bg-template-toggle', "none");
-    } 
-});
-
-document.querySelector("#bg-color-picker").addEventListener("input", function changeBgColor(e){
-    const chbx = document.querySelector("#toggle-bg-color");
-    document.documentElement.style.setProperty('--bg-color-toggle', this.value);
-    chbx.checked = true;
-});
-
-document.querySelector("#toggle-bg-color").addEventListener("change", function (e){
-
-    const colorPicker = document.querySelector("#bg-color-picker");
-    if (this.checked) {
-        document.documentElement.style.setProperty('--bg-color-toggle', colorPicker.value);
-
-    } else {
-        document.documentElement.style.setProperty('--bg-color-toggle', (`url("Images/Transparent.png")`));
-    } 
-});
-
-document.querySelector("#select-template").addEventListener("change", function(e){
+templateSelector.addEventListener("change", function(e){
     const chbx = document.querySelector("#toggle-template-chbx");
   
     changeTemplate();
@@ -124,7 +60,7 @@ document.querySelector("#select-template").addEventListener("change", function(e
 
 });
 
-document.querySelector("#toggle-opaque-chbx").addEventListener("change", function (e){
+opaqueCb.addEventListener("change", function (e){
     let isRedOverlayActive;
 
     isRedOverlayActive = !isRedOverlayActive;
@@ -152,7 +88,7 @@ document.querySelector("#toggle-opaque-chbx").addEventListener("change", functio
     });
 });
 
-document.querySelector("#toggle-boundingbx-chbx").addEventListener("change", function (e){
+boundingboxCb.addEventListener("change", function (e){
     let isBoundingActive;
 
     isBoundingActive = !isBoundingActive;
@@ -179,6 +115,19 @@ document.querySelector("#toggle-boundingbx-chbx").addEventListener("change", fun
         }
     });
 });
+
+scaleControls.addEventListener("click", scaleItems);
+
+function scaleItems(e) {
+    const btn = e.target.closest("[data-scale]");
+    if (!btn) return;
+
+    scaleControls.querySelector(".active").classList.remove("active");
+    btn.classList.add("active");
+
+    const scaleValue = btn.dataset.scale;
+    document.documentElement.style.setProperty("--scale-modifier", scaleValue);
+}
 
 //FUNTIONS------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -221,7 +170,6 @@ function loadFileListFromLocalStorage() {
 
 // Add new files, validate them, and update the file list
 function addFiles(files) {
-    console.log("Processing files:", files);
     const validationPromises = []; // Track validation promises for asynchronous handling
 
     for (let i = 0; i < files.length; i++) {
@@ -240,7 +188,6 @@ function addFiles(files) {
                     // Add file to the list if it's not a duplicate
                     if (!fileList.some(existingFile => existingFile.name === file.name && existingFile.size === file.size)) {
                         fileList.push(file); // Add validated file
-                        console.log(`${file.name} added to fileList.`);
                         generateThumbnail(file); // Generate a thumbnail for the file
                         saveFileListToLocalStorage(); // Save the updated list to localStorage
                     } else {
@@ -258,7 +205,6 @@ function addFiles(files) {
     // Log the updated fileList after all validations are done
     Promise.all(validationPromises)
         .then(() => {
-            console.log("Current fileList:", fileList);
 
             // Reset the input element to allow re-upload of the same file
             fileZone.value = ""; // Clear the value of the input element
@@ -316,7 +262,6 @@ function generateThumbnail(file) {
     // Add selection toggle logic for the thumbnail
     div.addEventListener("click", () => {
         div.classList.toggle("selected");
-        console.log(`${file.name} ${div.classList.contains("selected") ? "selected" : "deselected"}`);
     });
 }
 
@@ -361,7 +306,6 @@ function saveFileListToLocalStorage() {
 
     Promise.all(filePromises).then(simplifiedList => {
         localStorage.setItem("fileList", JSON.stringify(simplifiedList));
-        console.log("File list saved to localStorage:", simplifiedList);
     });
 }
 
@@ -447,14 +391,13 @@ function displayOriginalImage(file) {
 
     // Generate ID for the canvas
     const canvasId = `large-${CSS.escape(file.name)}`;
-    console.log("Generated large canvas ID:", canvasId);
 
     canvas.id = canvasId;
-    canvas.className = "pixelated";
+    canvas.className = "item-canvas pixelated";
     templateDspDiv.className = "template-display pixelated";
     coverAreaDspDiv.className = "cover-display pixelated";
     iconsDiv.className = "icons-display";
-    itemDiv.className = "item-display";
+    itemDiv.className = "item-display pixelated";
 
     const ctx = canvas.getContext("2d");
     div.appendChild(itemDiv);
@@ -508,20 +451,13 @@ function trashFiles() {
             const fileName = fileCanvas.id.replace("thumb-", "");
             const escapedFileName = CSS.escape(fileName);
 
-            console.log("Attempting to locate large canvas with ID:", `#large-${escapedFileName}`);
-
             // Locate the large image display
             const largeCanvas = Array.from(document.querySelectorAll("#large-display canvas")).find((canvas) => canvas.dataset.fileName === fileName);
             if (largeCanvas) {
                 const largeImageContainer = largeCanvas.closest(".large-file");
                 if (largeImageContainer) {
                     largeImageContainer.remove();
-                    console.log(`Removed large canvas for '${fileName}'.`);
-                } else {
-                    console.warn(`Container for large canvas '${escapedFileName}' not found.`);
-                }
-            } else {
-                console.warn(`Large canvas for '${escapedFileName}' not found.`);
+                } 
             }
 
             // Remove the thumbnail
@@ -532,11 +468,8 @@ function trashFiles() {
         });
 
         saveFileListToLocalStorage();
-        console.log("Updated fileList:", fileList);
     }
 }
-
-
 
 //returns zoom
 function getBrowserZoomLevel(){
@@ -544,11 +477,7 @@ function getBrowserZoomLevel(){
     return zoomLevel;
 }
 
-
-
-
 function changeTemplate(){
-    console.log("change");
     let template;
     switch (document.querySelector("#select-template").value){
         case "mannequin": template = "Images/mannequin.png"; break;
@@ -625,9 +554,7 @@ function checkCovereage(image, name, div){
         crotchCvrgImg.onload = () => {
 
             const result = isImageCoveringMask(boobCvrgImg, image);
-            //console.log("Is ", name, " covering the boobs?", result);
             const result1 = isImageCoveringMask(crotchCvrgImg, image);
-            //console.log("Is ", name, "covering the crotch", result1);
 
             if (result) {
                 const iconImg = document.createElement("img");
@@ -715,10 +642,96 @@ function drawBoundingBox(ctx, canvas) {
 
         const boxWidth = maxX - minX + 2;
         const boxHeight = maxY - minY + 2;
-        console.log(minX+0.5, minY+0.5, boxWidth, boxHeight);
         ctx1.strokeRect(minX+0.5, minY+0.5, boxWidth, boxHeight);
+    }
+}
+
+//Hide or extend the Menu
+function toggleMenu(){
+    const menuDiv = document.querySelector("#toggle-menu");
+    if (menuDiv.className == "hidden"){
+        menuDiv.classList.remove("hidden");
+        menuButton.src="Images/arrow-left.svg";
+    }
+    else{
+        menuDiv.className = "hidden";
+        menuButton.src="Images/arrow-right.svg";
+    }
+}
+
+// remove all files
+function startOver(){
+    if (fileList.length > 0) {
+        if (confirm("Are you sure you want to remove all files?")) {
+            fileList.forEach(file => {
+                const fileName = file.name;
+                escapedFileName = CSS.escape(fileName);
+
+                canvasThumbnail = document.querySelector(`#thumb-${escapedFileName}`);
+                thumbnailParent = canvasThumbnail.closest(".file");
+                thumbnailParent.remove();
+
+                const largeCanvas = Array.from(document.querySelectorAll("#large-display canvas")).find((canvas) => canvas.dataset.fileName === fileName)
+                largeParent = largeCanvas.closest(".large-file");
+                largeParent.remove();
+
+                // Update the fileList
+                fileList = fileList.filter((file) => file.name !== fileName);
+
+            });
+            saveFileListToLocalStorage();
+        }; 
     } else {
-        console.error("No content detected in the image.");
+        alert("Files are already empty");
+        return;
+    }
+}
+
+//Adjust checkered background square size
+function adjustChequeredSize(){
+    document.documentElement.style.setProperty('--bg-size', 28 * 100/getBrowserZoomLevel()+1+("px"));
+}
+
+// Add Droped files
+function dropHandler(e) {
+    e.preventDefault(); // Prevent default behavior for drop event
+    const files = e.dataTransfer.files; // Retrieve files from the event
+    addFiles(files); // Add files to the file list
+}
+
+function applyBackground(e){
+    const isChecked = e.target.checked;
+
+    if (isChecked) {
+        document.documentElement.style.setProperty('--bg-color-toggle', bgColorPicker.value);
+
+    } else {
+        document.documentElement.style.setProperty('--bg-color-toggle', (`url("Images/Transparent.png")`));
+    }
+}
+
+function changeBgColor(e){
+    const color = e.target.value;
+    document.documentElement.style.setProperty('--bg-color-toggle', color);
+    bgColorCb.checked = true;
+}
+
+function toggleCover(e){
+    const isChecked = e.target.checked;
+    if (isChecked) {
+        document.documentElement.style.setProperty('--bg-cover-toggle', `url("Images/Cover_Area.png")`);
+    } else {
+        document.documentElement.style.setProperty('--bg-cover-toggle', "none");
+    }
+}
+
+function toggleTemplate(e){
+    const isChecked = e.target.checked;
+    
+    if (isChecked) {
+        changeTemplate();
+    } else {
+        document.documentElement.style.setProperty('--bg-template-toggle', "none");
     }
 }
 

@@ -14,12 +14,14 @@
 </head>
 <body>
 	<header>
-		<h1 class="no-select">goPixelart</h1>
-		<nav>
-			<a href="index.html"><div class="home-btn nav-btn active"><span>Home</span></div>
-			<a href="about.html"><div class="about-btn nav-btn"><span>About</span></div></a>
-			<a href="updates.html"><div class="updates-btn nav-btn"><span>Updates</span></div></a>
-		</nav>
+		<div class="header-content">
+			<h1 class="no-select">goPixelart</h1>
+			<nav>
+				<a href="index.html"><div class="home-btn nav-btn active"><span>Home</span></div>
+				<a href="about.html"><div class="about-btn nav-btn"><span>About</span></div></a>
+				<a href="updates.html"><div class="updates-btn nav-btn"><span>Updates</span></div></a>
+			</nav>
+		</div>
 	</header>
 
 	<main>	
@@ -87,6 +89,24 @@
 							<option value="skin-14">skin-14</option>
 							<option value="skin-15">skin-15</option>
 						</select>
+					</div>
+
+					<div>
+						<fieldset>
+						<legend>Model scale</legend>
+						<div id="scale-controls" class="checkbox no-select">
+							<div class="scale-btn active" data-scale="1">
+								<span>1x</span>
+							</div>
+							
+							<div class="scale-btn" data-scale="2">
+								<span>2x</span>
+							</div>
+
+							<div class="scale-btn" data-scale="3">
+								3x
+							</div>
+						</div></fieldset>
 					</div>
 				</div>
 			</div>
