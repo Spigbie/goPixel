@@ -1,3 +1,5 @@
+//DOM SELECTIONS------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 // Select elements for file upload zone and thumbnail display
 const dropZone = document.querySelector("html");
 const fileZone = document.querySelector("#upload-files");
@@ -8,17 +10,7 @@ const menuButtonDiv = document.querySelector("#toggle-menu-button");
 const menuButton = document.querySelector("#toggle-menu-button img");
 
 
-
-// Load the fileList from localStorage when the page loads
-fileList = loadFileListFromLocalStorage();
-
-// Generate thumbnails for stored files in fileList
-fileList.forEach(file => generateThumbnail(file));
-
-console.log("Initial fileList:", fileList);
-if (fileList.length == 0) {
-    displayStartMessage();
-}
+//EVENT LISTENERS------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 // Event listener for drag-and-drop functionality
 dropZone.addEventListener("dragover", (e) => {
@@ -53,6 +45,154 @@ menuButton.addEventListener("click", (e) => {
 
 document.querySelector("#trash-btn").addEventListener("click", trashFiles);
 
+document.querySelector("#delete-all-btn").addEventListener("click", (e) => {    
+    if (fileList.length > 0) {
+        if (confirm("Are you sure you want to remove all files?")) {
+            fileList.forEach(file => {
+                const fileName = file.name;
+                escapedFileName = CSS.escape(fileName);
+
+                //console.log("Attempting to locate thumbnail with ID:", `#thumb-${fileName}`, document.querySelector(`#thumb-${escapedFileName}`));
+                canvasThumbnail = document.querySelector(`#thumb-${escapedFileName}`);
+                thumbnailParent = canvasThumbnail.closest(".file");
+                thumbnailParent.remove();
+
+                //console.log("Attempting to locate items with ID:", `#large-${fileName}`, document.querySelector(`#large-${escapedFileName}`));
+                const largeCanvas = Array.from(document.querySelectorAll("#large-display canvas")).find((canvas) => canvas.dataset.fileName === fileName)
+                largeParent = largeCanvas.closest(".large-file");
+                largeParent.remove();
+
+                // Update the fileList
+                fileList = fileList.filter((file) => file.name !== fileName);
+
+            });
+            saveFileListToLocalStorage();
+        }; 
+    } else {
+        alert("Files are already empty");
+        return;
+    }  
+});
+
+//listens for zooming
+window.addEventListener("resize", (e) => {
+    getBrowserZoomLevel();
+    
+    document.documentElement.style.setProperty('--bg-size', 28 * 100/getBrowserZoomLevel()+1+("px"));
+});
+
+document.querySelector("#toggle-cover-chbx").addEventListener("change", function (e){
+    if (this.checked) {
+        document.documentElement.style.setProperty('--bg-cover-toggle', `url("Images/Cover_Area.png")`);
+        console.log("Checkbox is checked..");
+    } else {
+        document.documentElement.style.setProperty('--bg-cover-toggle', "none");
+        console.log("Checkbox is not checked..");
+    } 
+});
+
+document.querySelector("#toggle-template-chbx").addEventListener("change", function (e){
+    if (this.checked) {
+        changeTemplate();
+    } else {
+        document.documentElement.style.setProperty('--bg-template-toggle', "none");
+    } 
+});
+
+document.querySelector("#bg-color-picker").addEventListener("input", function changeBgColor(e){
+    const chbx = document.querySelector("#toggle-bg-color");
+    document.documentElement.style.setProperty('--bg-color-toggle', this.value);
+    chbx.checked = true;
+});
+
+document.querySelector("#toggle-bg-color").addEventListener("change", function (e){
+
+    const colorPicker = document.querySelector("#bg-color-picker");
+    if (this.checked) {
+        document.documentElement.style.setProperty('--bg-color-toggle', colorPicker.value);
+
+    } else {
+        document.documentElement.style.setProperty('--bg-color-toggle', (`url("Images/Transparent.png")`));
+    } 
+});
+
+document.querySelector("#select-template").addEventListener("change", function(e){
+    const chbx = document.querySelector("#toggle-template-chbx");
+  
+    changeTemplate();
+    chbx.checked = true;
+
+});
+
+document.querySelector("#toggle-opaque-chbx").addEventListener("change", function (e){
+    let isRedOverlayActive;
+
+    isRedOverlayActive = !isRedOverlayActive;
+    if (this.checked){
+        isRedOverlayActive = true;
+    } else {
+        isRedOverlayActive = false;
+    }
+
+    const largeDisplay = document.querySelector("#large-display");
+    const canvases = largeDisplay.querySelectorAll("canvas");
+
+    canvases.forEach((canvas) => {
+        const ctx = canvas.getContext("2d");
+        if (canvas.parentElement.querySelector(".opaqueFilter") != null){
+            if (isRedOverlayActive){
+                canvas.parentElement.querySelector(".opaqueFilter").classList.remove("hidden");
+
+            } else{
+                canvas.parentElement.querySelector(".opaqueFilter").classList.add("hidden");
+            }
+        } else {
+            applyRedOverlay(ctx, canvas);
+        }
+    });
+});
+
+document.querySelector("#toggle-boundingbx-chbx").addEventListener("change", function (e){
+    let isBoundingActive;
+
+    isBoundingActive = !isBoundingActive;
+    if (this.checked){
+        isBoundingActive = true;
+    } else {
+        isBoundingActive = false;
+    }
+
+    const largeDisplay = document.querySelector("#large-display");
+    const canvases = largeDisplay.querySelectorAll("canvas");
+
+    canvases.forEach((canvas) => {
+        const ctx = canvas.getContext("2d");
+        if (canvas.parentElement.querySelector(".boundingBox") != null){
+            if (isBoundingActive){
+                canvas.parentElement.querySelector(".boundingBox").classList.remove("hidden");
+
+            } else{
+                canvas.parentElement.querySelector(".boundingBox").classList.add("hidden");
+            }
+        } else {
+            drawBoundingBox(ctx, canvas);
+        }
+    });
+});
+
+//FUNTIONS------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+function init() {
+    // Load the fileList from localStorage when the page loads
+    fileList = loadFileListFromLocalStorage();
+
+    // Generate thumbnails for stored files in fileList
+    fileList.forEach(file => generateThumbnail(file));
+
+    if (fileList.length == 0) {
+        displayStartMessage();
+    }    
+}
 
 function displayStartMessage() {
     
@@ -135,7 +275,7 @@ function generateThumbnail(file) {
 
     // Create a container for the thumbnail
     const div = document.createElement("div");
-    div.classList.add("file");
+    div.className = ("file pointer");
     div.innerHTML = `<div><canvas id="thumb-${file.name}"></canvas></div><p>${file.name}</p>`;
     thumbnailDiv.appendChild(div); // Append to the designated container
 
@@ -179,7 +319,6 @@ function generateThumbnail(file) {
         console.log(`${file.name} ${div.classList.contains("selected") ? "selected" : "deselected"}`);
     });
 }
-
 
 // Validate the dimensions of an image file
 function validateDimensions(file) {
@@ -311,8 +450,9 @@ function displayOriginalImage(file) {
     console.log("Generated large canvas ID:", canvasId);
 
     canvas.id = canvasId;
-    templateDspDiv.className = "template-display";
-    coverAreaDspDiv.className = "cover-display";
+    canvas.className = "pixelated";
+    templateDspDiv.className = "template-display pixelated";
+    coverAreaDspDiv.className = "cover-display pixelated";
     iconsDiv.className = "icons-display";
     itemDiv.className = "item-display";
 
@@ -347,34 +487,7 @@ function displayOriginalImage(file) {
     reader.readAsDataURL(file);
 }
 
-document.querySelector("#delete-all-btn").addEventListener("click", (e) => {    
-    if (fileList.length > 0) {
-        if (confirm("Are you sure you want to remove all files?")) {
-            fileList.forEach(file => {
-                const fileName = file.name;
-                escapedFileName = CSS.escape(fileName);
 
-                //console.log("Attempting to locate thumbnail with ID:", `#thumb-${fileName}`, document.querySelector(`#thumb-${escapedFileName}`));
-                canvasThumbnail = document.querySelector(`#thumb-${escapedFileName}`);
-                thumbnailParent = canvasThumbnail.closest(".file");
-                thumbnailParent.remove();
-
-                //console.log("Attempting to locate items with ID:", `#large-${fileName}`, document.querySelector(`#large-${escapedFileName}`));
-                const largeCanvas = Array.from(document.querySelectorAll("#large-display canvas")).find((canvas) => canvas.dataset.fileName === fileName)
-                largeParent = largeCanvas.closest(".large-file");
-                largeParent.remove();
-
-                // Update the fileList
-                fileList = fileList.filter((file) => file.name !== fileName);
-
-            });
-            saveFileListToLocalStorage();
-        }; 
-    } else {
-        alert("Files are already empty");
-        return;
-    }  
-});
 
 function trashFiles() {
     const selectedThumbnails = document.querySelectorAll(".file.selected");
@@ -423,12 +536,7 @@ function trashFiles() {
     }
 }
 
-//listens for zooming
-window.addEventListener("resize", (e) => {
-    getBrowserZoomLevel();
-    
-    document.documentElement.style.setProperty('--bg-size', 28 * 100/getBrowserZoomLevel()+1+("px"));
-});
+
 
 //returns zoom
 function getBrowserZoomLevel(){
@@ -436,15 +544,7 @@ function getBrowserZoomLevel(){
     return zoomLevel;
 }
 
-document.querySelector("#toggle-cover-chbx").addEventListener("change", function (e){
-    if (this.checked) {
-        document.documentElement.style.setProperty('--bg-cover-toggle', `url("Images/Cover_Area.png")`);
-        console.log("Checkbox is checked..");
-    } else {
-        document.documentElement.style.setProperty('--bg-cover-toggle', "none");
-        console.log("Checkbox is not checked..");
-    } 
-});
+
 
 
 function changeTemplate(){
@@ -471,40 +571,6 @@ function changeTemplate(){
     }
     document.documentElement.style.setProperty('--bg-template-toggle', `url("${template}")`);
 };
-
-document.querySelector("#select-template").addEventListener("change", function(e){
-    const chbx = document.querySelector("#toggle-template-chbx");
-  
-    changeTemplate();
-    chbx.checked = true;
-
-});
-
-document.querySelector("#toggle-template-chbx").addEventListener("change", function (e){
-    if (this.checked) {
-        changeTemplate();
-    } else {
-        document.documentElement.style.setProperty('--bg-template-toggle', "none");
-    } 
-});
-
-document.querySelector("#bg-color-picker").addEventListener("input", function changeBgColor(e){
-    const chbx = document.querySelector("#toggle-bg-color");
-    document.documentElement.style.setProperty('--bg-color-toggle', this.value);
-    chbx.checked = true;
-});
-
-document.querySelector("#toggle-bg-color").addEventListener("change", function (e){
-
-    const colorPicker = document.querySelector("#bg-color-picker");
-    if (this.checked) {
-        document.documentElement.style.setProperty('--bg-color-toggle', colorPicker.value);
-
-    } else {
-        document.documentElement.style.setProperty('--bg-color-toggle', (`url("Images/Transparent.png")`));
-    } 
-});
-
 
 function isImageCoveringMask(alphaMask, image) {
     threshold = 229;
@@ -576,34 +642,6 @@ function checkCovereage(image, name, div){
         };
     };
 }
-
-document.querySelector("#toggle-opaque-chbx").addEventListener("change", function (e){
-    let isRedOverlayActive;
-
-    isRedOverlayActive = !isRedOverlayActive;
-    if (this.checked){
-        isRedOverlayActive = true;
-    } else {
-        isRedOverlayActive = false;
-    }
-
-    const largeDisplay = document.querySelector("#large-display");
-    const canvases = largeDisplay.querySelectorAll("canvas");
-
-    canvases.forEach((canvas) => {
-        const ctx = canvas.getContext("2d");
-        if (canvas.parentElement.querySelector(".opaqueFilter") != null){
-            if (isRedOverlayActive){
-                canvas.parentElement.querySelector(".opaqueFilter").classList.remove("hidden");
-
-            } else{
-                canvas.parentElement.querySelector(".opaqueFilter").classList.add("hidden");
-            }
-        } else {
-            applyRedOverlay(ctx, canvas);
-        }
-    });
-});
 
 function applyRedOverlay(ctx, canvas) {
     const newCanvas = document.createElement("canvas");
@@ -684,31 +722,6 @@ function drawBoundingBox(ctx, canvas) {
     }
 }
 
+//INITIALISE!--------------------------------------------------------------------------------------------------------------
 
-document.querySelector("#toggle-boundingbx-chbx").addEventListener("change", function (e){
-    let isBoundingActive;
-
-    isBoundingActive = !isBoundingActive;
-    if (this.checked){
-        isBoundingActive = true;
-    } else {
-        isBoundingActive = false;
-    }
-
-    const largeDisplay = document.querySelector("#large-display");
-    const canvases = largeDisplay.querySelectorAll("canvas");
-
-    canvases.forEach((canvas) => {
-        const ctx = canvas.getContext("2d");
-        if (canvas.parentElement.querySelector(".boundingBox") != null){
-            if (isBoundingActive){
-                canvas.parentElement.querySelector(".boundingBox").classList.remove("hidden");
-
-            } else{
-                canvas.parentElement.querySelector(".boundingBox").classList.add("hidden");
-            }
-        } else {
-            drawBoundingBox(ctx, canvas);
-        }
-    });
-});
+init();

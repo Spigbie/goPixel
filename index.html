@@ -14,7 +14,7 @@
 </head>
 <body>
 	<header>
-		<h1>goPixelart</h1>
+		<h1 class="no-select">goPixelart</h1>
 		<nav>
 			<a href="index.html"><div class="home-btn nav-btn active"><span>Home</span></div>
 			<a href="about.html"><div class="about-btn nav-btn"><span>About</span></div></a>
@@ -24,7 +24,7 @@
 
 	<main>	
 		<div class="menu">
-			<div id="toggle-menu-button"><img src="Images/arrow-left.svg"></div>
+			<div id="toggle-menu-button"><img src="Images/arrow-left.svg" class="pointer no-select"></div>
 			<div id="toggle-menu">
 				<div>
 					<input type="file" id="upload-files" accept=".png" multiple hidden>
@@ -94,7 +94,7 @@
 		
 		<div class="item-overview">
 			<div class="get-started hidden"><span>Get started by dragging and dropping your item files anywhere on the website or clicking "Add items".</span></div>
-			<div id="thumbnails"></div>
+			<div class="thumbnails-outer"><div id="thumbnails"></div></div>
 			<div id="large-display"></div>
 		</div>
 	</main>

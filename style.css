@@ -3,10 +3,21 @@
     src: url('https://use.typekit.net/af/32b70b/0000000000000000775a3832/31/l?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=n4&v=3'); /*URL to font*/
 }
 
-.template-display, .cover-display, .item-display canvas{
-	image-rendering: pixelated;
-}
+/*
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    height: auto;
+  }
 
+  nav {
+    flex-wrap: wrap;
+  }
+
+  main {
+    flex-direction: column;
+  }
+}*/
 
 :root{
 	--bg-size: 28px;
@@ -26,43 +37,20 @@
 	--color-6: #cf8383;
 }
 
-* {
-	padding: 0;
-	margin: 0;
-	font-family: 'Inter', sans-serif;
+/* General ------------------------------------------------------------------- */
+
+/* render pixelated */
+.pixelated {
+	image-rendering: pixelated;
 }
 
-body{
-	display: grid;
-	width: 100%;
-	background-color: var(--color-0);
-}
-.hidden{
-	display: none !important;
-	visibility: hidden important;
-}
-header{
-	display: flex;
-	align-items: center;
-	gap: 28px;
-	height: 95px;
-	background: linear-gradient(30deg, var(--color-2), var(--color-0));
-	padding: 14px 28px;
+/* cursor pointer */
+.button, .checkbox > *, .pointer{
+	cursor: pointer;
 }
 
-header h1{
-	font-family: 'Cooper';
-	color: var(--color-0);
-	user-select: none;
-}
-
-nav{
-	display: flex;
-	gap: 14px;
-
-}
-
-header h1, #toggle-menu-button img, .checkbox label, nav * {
+/* user select none */
+.checkbox label, nav *, .no-select {
 	user-drag: none;
     -webkit-user-drag: none;
     user-select: none;
@@ -71,23 +59,71 @@ header h1, #toggle-menu-button img, .checkbox label, nav * {
     -ms-user-select: none;
 }
 
+/* Hide elements */
+.hidden{
+	display: none !important;
+	visibility: hidden !important;
+}
+
+/* Active nav button */
+.active{
+	background-color: var(--color-3) !important;
+	color: var(--color-0) !important;
+}
+
+/* Body ------------------------------------------------------------------- */
+
+*, *::before, *::after {
+	padding: 0;
+	margin: 0;
+	box-sizing: border-box;
+	
+}
+
+*{
+	font-family: 'Inter', sans-serif;
+}
+
+body{
+	display: grid;
+	width: 100%;
+	background-color: var(--color-0);
+}
+
+/* Header ------------------------------------------------------------------- */
+
+header{
+	display: flex;
+	align-items: center;
+	gap: 28px;
+	height: 95px;
+	padding: 14px 28px;
+	background: linear-gradient(30deg, var(--color-2), var(--color-0));
+}
+
+header h1{
+	color: var(--color-0);
+	font-family: 'Cooper';
+}
+
+/* Nav ------------------------------------------------------------------- */
+
+nav{
+	display: flex;
+	gap: 14px;
+}
+
 .nav-btn{
 	padding: 14px 28px;
-	background-color: var(--color-0);
 	border-radius: 50px;
-	font-weight: bold;
-	font-size: 20px;
+	background-color: var(--color-0);
 	color: var(--color-2);
-
+	font-size: 20px;
+	font-weight: bold;
 }
+
 .nav-btn:hover{
 	background-color: var(--color-4);
-	color: var(--color-0);
-
-}
-
-.active{
-	background-color: var(--color-3);
 	color: var(--color-0);
 }
 
@@ -95,83 +131,60 @@ nav a{
 	text-decoration: none;
 }
 
+/* Main ------------------------------------------------------------------- */
+
 main{
-	box-sizing: border-box;
-	padding: 14px;
 	display: flex;
 	gap: 14px;
+	box-sizing: border-box;
 	width: 100%;
-	overflow: hidden;
+	padding: 14px;
 }
 
-.item-overview{
-	flex: 1 1 auto;
-	display: flex;
-	flex-direction: column;
-	min-width: 0;
-	overflow: hidden;
-	gap: 14px;
+.get-started{
+	padding: 40px;
+	color: var(--color-2);
+	font-size: 20px;
+	text-align: center;
 }
+
+/* Menu ------------------------------------------------------------------- */
 
 .menu{
-	align-self: flex-start;
-	flex: 0 0 auto;
 	position: sticky;
 	top: 0;	
 	display: flex;
+	flex: 0 0 auto;
+	align-self: flex-start;
 	gap: 7px;
 	padding-top: 14px;
 }
 
 #toggle-menu{
-	font-size: 14px;
-	gap: 14px;
 	display: flex;
 	flex-direction: column;
+	gap: 14px;
+	font-size: 14px;
 }
-
-#toggle-menu-button img{
-	cursor: pointer;
-}
-
-.checkboxes{
-	color: var(--color-3);
-}
-.checkbox {
-	min-height: 27px;
-	display: flex;
-	align-items: center;
-	gap: 7px;
-}
-
-.checkbox > *{
-	cursor: pointer;
-}
-
-#files{
-}
-
-#thumbnails{
-  display: flex;
-  gap: 14px;
-  overflow-x: auto;
-  overflow-y: hidden;
-  white-space: nowrap;
-  padding: 5px;
-}
-
 
 .button{
-	border-radius: 100px;
-	padding: 7px;
-	box-sizing: border-box;
-	font-size: 16px;
-	color: var(--color-0);
-	cursor: pointer;
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	gap: 7px;
+	box-sizing: border-box;
+	padding: 7px;
+	border-radius: 100px;
+	color: var(--color-0);
+	font-size: 16px;	
+}
+
+.button img{
+	filter: invert(100%) brightness(120%);
+}
+
+.button input::-webkit-file-upload-button{
+	visibility: hidden;
 }
 
 #upload-files-btn{
@@ -190,136 +203,130 @@ main{
 	background-color: var(--color-6);
 }
 
-
-.button img{
-	filter: invert(100%) brightness(120%);
-}
-
-
-
-.button input::-webkit-file-upload-button{
-	visibility: hidden;
-}
-
-
 .checkboxes{
 	display: flex;
 	flex-direction: column;
 	gap: 7px;
+	color: var(--color-3);	
 }
 
-.checkbox{
+.checkbox {
+	display: flex;
+	align-items: center;
+	gap: 7px;
+	min-height: 27px;	
 	white-space: nowrap;
 }
 
-
-input {
+#toggle-menu input{
+	border: none;
     outline: none;
-    border: none;
     background: none;
 }
 
-#files img{
-	opacity: 0.1;
+/* Item overview ------------------------------------------------------------------- */
+
+.item-overview{
+	display: flex;
+	flex: 1 1 auto;
+	flex-direction: column;
+	/*gap: 14px;*/
+	width: 10px;
+	min-width: 0;
+}
+
+/* Thumbnails ------------------------------------------------------------------- */
+.thumbnails-outer{
+	position: sticky;
+	top: 0;
+	z-index: 10;
+	padding: 14px 0px 7px 0px;
+	background-color: var(--color-0);
+}
+
+#thumbnails{
+	display: flex;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  overflow-y: hidden;
+  white-space: nowrap;
+}
+
+#thumbnails::-webkit-scrollbar { 
+	width: 8px; 
+}
+
+.selected > div{
+  background-color: var(--color-6) !important;
 }
 
 .file{
-	width: 60px;
 	display: flex;
 	flex-direction: column;
 	gap: 7px;
+	margin: 0 7px 7px 7px;
+	width: 50px;
 }
+
 .file div{
+	display: flex;
+	justify-content: center;
+	align-items: center;
 	width: 50px;
 	height: 50px;
 	padding: 5px;
 	border-radius: 10px;
-	background-color: var(--color-1);
 	box-shadow: 2px 5px 5px rgba(0, 0, 0, 0.3);
-	display: flex;
-	align-items: center;
-	justify-content: center;
+	background-color: var(--color-1);	
 }
 
 .file div:hover{
-	cursor: pointer;
 	background-color: var(--color-2);
 }
 
-.file p, .large-file p{
-	width: inherit;
-	text-wrap: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	box-sizing: border-box;
-	color: var(--color-2);
-}
-
-.file p{
-	font-size: 8px;
-}
-.large-file p{
-	font-size: 10px;
-}
-
-.selected > div{
-    	background-color: var(--color-6);
-}
 .file canvas{
 	max-width: 50px;
 	max-height: 50px;
 }
 
+.file p, .large-file p{
+	overflow: hidden;
+	box-sizing: border-box;
+	width: inherit;
+	color: var(--color-2);
+	text-wrap: nowrap;
+	text-overflow: ellipsis;	
+}
+
+.file p{
+	font-size: 8px;
+}
+
+/* Large Display ------------------------------------------------------------------- */
+
 #large-display{
 	display: flex;
-	gap: 14px;
 	flex-wrap: wrap;
-	padding: 5px;
+	gap: 14px;
+	padding: 14px;
 }
 
 .large-file{
-	width: 140px;
-	font-size: 9px;
-	color: var(--color-4);
 	display: flex;
 	flex-direction: column;
-	gap: 7px;
-}
-
-.cover-display{
-	background-image: var(--bg-cover-toggle);
-	image-rendering: pixelated;
-	display: block;
-}
-
-.template-display{
-	background-image: var(--bg-template-toggle);
-}
-
-.item-display{
-	position: relative;
+	gap: 7px;	
 	width: 140px;
-	height: 300px;
-	background: var(--bg-color-toggle);
-	background-size: var(--bg-size);
-	box-shadow: 2px 5px 5px rgba(0, 0, 0, 0.3);
+	color: var(--color-4);
+	font-size: 9px;
+}
+
+.large-file p{
+	font-size: 10px;
 }
 
 .large-file canvas{
 	position: absolute;
 	image-rendering: pixelated;
-}
-
-
-
-footer{
-	padding: 14px;
-	box-sizing: border-box;
-	background-color: var(--color-2);
-	position: fixed;
-	bottom: 0;
-	width: 100%;
-	font-size: 11px;
 }
 
 .large-file div div{
@@ -328,25 +335,38 @@ footer{
 	height: 100%;
 }
 
-.icons-display{
-	display: flex;
-	gap: 3px;
+.item-display{
+	position: relative;
+	width: 140px;
+	height: 300px;
+	box-shadow: 2px 5px 5px rgba(0, 0, 0, 0.3);
+	background: var(--bg-color-toggle);
+	background-size: var(--bg-size);
 }
+
+.cover-display{
+	display: block;
+	background-image: var(--bg-cover-toggle);
+	image-rendering: pixelated;
+}
+
 .boundingBox{
 	top: -1px;
 	left: -1px;
 }
 
+.template-display{
+	background-image: var(--bg-template-toggle);
+}
+
+.icons-display{
+	display: flex;
+	gap: 3px;
+}
+
+/* Updates ------------------------------------------------------------------- */
+
 td, th{
-	border: 1px solid black;
 	padding: 3px;
+	border: 1px solid black;
 }
-
-.get-started{
-	font-size: 20px;
-	text-align: center;
-	padding: 40px;
-	color: var(--color-2);
-}
-
-
