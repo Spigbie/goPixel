@@ -481,7 +481,7 @@ function changeTemplate(){
     let template;
     switch (document.querySelector("#select-template").value){
         case "mannequin": template = "Images/mannequin.png"; break;
-        case "mannequin-gSt": template = "Images/gSt Mannequin.png"; break;
+        case "mannequin-gSt": template = "Images/gSt_mannequin.png"; break;
         case "skin-1": template = "https://gosupermodel.com/dollsnapshot.png?k=AAAAANZa9n8ABQAAACsFAAQAACcTAQACAAAB1MAAAg4AAAAnEQEAAAAAACcRAgAAAAAAAAABA.Ye&l=t"; break;
         case "skin-2": template = "https://gosupermodel.com/dollsnapshot.png?k=AAAAAIL_Of8ABQAAACsFAAQAACcTAQECAAAB1MAAAg4AAAAnEQEAAAAAACcRAgAAAAAAAABvj_1f&l=t"; break;
         case "skin-3": template = "https://gosupermodel.com/dollsnapshot.png?k=AAAAAN62P1sABQAAACsFAAQAACcTAQICAAAB1MAAAg4AAAAnEQEAAAAAACcRAgAAAAAAAADcG9Cc&l=t"; break;
