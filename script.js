@@ -179,6 +179,7 @@ function loadFileListFromLocalStorage() {
 
 // Add new files, validate them, and update the file list
 function addFiles(files) {
+    let warningList = [];
     const validationPromises = []; // Track validation promises for asynchronous handling
 
     for (let i = 0; i < files.length; i++) {
@@ -187,11 +188,12 @@ function addFiles(files) {
         // Skip files that are not PNGs
         if (file.type !== "image/png") {
             console.warn(`${file.name} is not a PNG file.`);
+            warningList.push(`${file.name} - is not a PNG file.`);
             continue;
         }
 
 		// Validate dimensions of the file asynchronously
-        const validationPromise = validateDimensions(file)
+            const validationPromise = validateDimensions(file)
             .then(isValid => {
                 if (isValid) {
                     // Add file to the list if it's not a duplicate
@@ -201,12 +203,16 @@ function addFiles(files) {
                         saveFileListToLocalStorage(); // Save the updated list to localStorage
                     } else {
                         console.warn(`${file.name} is already in the file list.`);
+                        warningList.push(`${file.name} - is already added.`);
                     }
                 } else {
                     console.warn(`${file.name} does not meet the dimension requirements.`);
+                    warningList.push(`${file.name} - is the wrong size.`);
                 }
             })
             .catch(error => console.error(`Error validating file ${file.name}:`, error));
+
+            
 
         validationPromises.push(validationPromise); // Store each validation promise
     }
@@ -217,7 +223,15 @@ function addFiles(files) {
 
             // Reset the input element to allow re-upload of the same file
             fileZone.value = ""; // Clear the value of the input element
+            showWarnings(warningList);
         });
+    
+}
+
+function showWarnings(warningList){
+    if(warningList.length > 0){
+        window.alert(warningList.join('\n'));
+    }
 }
 
 // Generate a thumbnail for a validated file and display it
