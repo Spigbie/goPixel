@@ -19,6 +19,7 @@ const bgColorPicker = document.querySelector("#bg-color-picker");
 const templateSelector = document.querySelector("#select-template");
 const opaqueCb = document.querySelector("#toggle-opaque-chbx");
 const scaleControls = document.querySelector("#scale-controls");
+const startMessage = document.querySelector("#get-started");
 
 
 
@@ -138,12 +139,17 @@ function init() {
     // Generate thumbnails for stored files in fileList
     fileList.forEach(file => generateThumbnail(file));
 
-    if (fileList.length == 0) {
-        displayStartMessage();
-    }    
+    displayStartMessage(fileList);
+
+      
 }
 
-function displayStartMessage() {
+function displayStartMessage(array) {
+    if (array.length==0){
+        startMessage.classList.remove("hidden");
+    } else{
+        startMessage.classList.add("hidden");
+    }
     
 }
 
@@ -164,8 +170,11 @@ function loadFileListFromLocalStorage() {
                 size: fileData.size,
             });
         });
+        
     }
+    
     return [];
+    
 }
 
 // Add new files, validate them, and update the file list
@@ -289,7 +298,9 @@ function validateDimensions(file) {
 
 // Save the current fileList to localStorage in a simplified format
 function saveFileListToLocalStorage() {
+    displayStartMessage(fileList);
     const filePromises = fileList.map(file => {
+        
         return new Promise(resolve => {
             const reader = new FileReader();
             reader.onload = function (e) {
@@ -301,12 +312,16 @@ function saveFileListToLocalStorage() {
                 });
             };
             reader.readAsDataURL(file);
+
+            
         });
     });
 
     Promise.all(filePromises).then(simplifiedList => {
         localStorage.setItem("fileList", JSON.stringify(simplifiedList));
     });
+
+    //displayStartMessage(fileList);
 }
 
 function getPixelObjects(imageData) {
@@ -428,9 +443,8 @@ function displayOriginalImage(file) {
         img.src = e.target.result;
     };
     reader.readAsDataURL(file);
+
 }
-
-
 
 function trashFiles() {
     const selectedThumbnails = document.querySelectorAll(".file.selected");
@@ -651,11 +665,11 @@ function toggleMenu(){
     const menuDiv = document.querySelector("#toggle-menu");
     if (menuDiv.className == "hidden"){
         menuDiv.classList.remove("hidden");
-        menuButton.src="Images/arrow-left.svg";
+        menuBtn.src="Images/arrow-left.svg";
     }
     else{
         menuDiv.className = "hidden";
-        menuButton.src="Images/arrow-right.svg";
+        menuBtn.src="Images/arrow-right.svg";
     }
 }
 
@@ -677,7 +691,6 @@ function startOver(){
 
                 // Update the fileList
                 fileList = fileList.filter((file) => file.name !== fileName);
-
             });
             saveFileListToLocalStorage();
         }; 
