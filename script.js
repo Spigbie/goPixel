@@ -523,7 +523,7 @@ function changeTemplate(){
         case "skin-11": template = "https://gosupermodel.com/dollsnapshot.png?k=AAAAAM0T9c0ABQAAACsFAAQADFIrAQACAAAB1MAAAg4AAAAnEQEAAAAAACcRAgAAAAAAAAD3QYpZ&l=t"; break;
         case "skin-12": template = "https://gosupermodel.com/dollsnapshot.png?k=AAAAAP0GgdQABQAAACsFAAQADFIsAQACAAAB1MAAAg4AAAAnEQEAAAAAACcRAgAAAAAAAAAFJ4Pk&l=t"; break;
         case "skin-13": template = "https://gosupermodel.com/dollsnapshot.png?k=AAAAAD3TQiQABQAAACsFAAQADFItAQACAAAB1MAAAg4AAAAnEQEAAAAAACcRAgAAAAAAAABmIFrA&l=t"; break;
-        case "skin-14": template = "https://gosupermodel.com/dollsnapshot.png?k=AAAAANEZWtQABQAAACsFAAQADFIuAQACAAAB1MAAAg4AAAAnEQEAAAAAACcRAgAAAAAAAADDKDGs&l=t"; break;
+        case "skin-14": template = "https://gosupermodel.com/dollsnapshot.png?k=AAAAAAoBmqUABQAAACsFAAQADGJrAQACAAAB1MAAAg4AAAAnEQEAAwAAACcRAgAEAAAAAACfn46P&l=t"; break;
         case "skin-15": template = "https://gosupermodel.com/dollsnapshot.png?k=AAAAABHMmSQABQAAACsFAAQADFIvAQACAAAB1MAAAg4AAAAnEQEAAAAAACcRAgAAAAAAAACgL.iI&l=t"; break;
     }
     document.documentElement.style.setProperty('--bg-template-toggle', `url("${template}")`);
@@ -763,5 +763,6 @@ function toggleTemplate(e){
 }
 
 //INITIALISE!--------------------------------------------------------------------------------------------------------------
+
 
 init();
